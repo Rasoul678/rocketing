@@ -1,5 +1,11 @@
-use rocket::*;
-use std::{fs, io};
+use rocket::{
+    fs::{FileServer, NamedFile},
+    *,
+};
+use std::{
+    fs, io,
+    path::{Path, PathBuf},
+};
 use tokio::time::{sleep, Duration};
 // #[macro_use] extern crate rocket;
 
@@ -28,10 +34,27 @@ async fn blocking_task() -> io::Result<Vec<u8>> {
     Ok(vec)
 }
 
+#[get("/page/<path..>")]
+fn get_page(path: PathBuf) {
+    for p in &path {
+        println!("{:#?}", p);
+    }
+
+    println!("{}", path.display());
+}
+
+#[get("/public/<file..>")]
+async fn files(file: PathBuf) -> Option<NamedFile> {
+    NamedFile::open(Path::new("www/static/").join(file))
+        .await
+        .ok()
+}
+
 #[rocket::main]
 async fn main() -> Result<(), rocket::Error> {
     let _rocket = rocket::build()
-        .mount("/", routes![index, hello, delay, blocking_task])
+        .mount("/", routes![index, hello, delay, blocking_task, get_page])
+        .mount("/public", FileServer::from("www/static/").rank(-20))
         .launch()
         .await?;
 
