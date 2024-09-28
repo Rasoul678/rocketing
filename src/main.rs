@@ -54,7 +54,7 @@ async fn files(file: PathBuf) -> Option<NamedFile> {
 async fn main() -> Result<(), rocket::Error> {
     let _rocket = rocket::build()
         .mount("/", routes![index, hello, delay, blocking_task, get_page])
-        .mount("/public", FileServer::from("www/static/").rank(-20))
+        .mount("/public", FileServer::from("www/static/"))
         .launch()
         .await?;
 

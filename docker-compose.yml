@@ -1,0 +1,22 @@
+version: "3.9"
+services:
+  db:
+    image: postgres:14-alpine
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=rocket
+      - POSTGRES_USER=rocket
+      - POSTGRES_DB=rocket
+    volumes:
+      - pgdata:/var/lib/postgresql@14/data:rw
+    ports: 
+      - "5432:5432"
+ 
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+ 
+volumes:
+  pgdata:
