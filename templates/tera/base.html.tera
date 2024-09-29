@@ -8,10 +8,11 @@
   <body>
     {% include "tera/nav" %}
 
-    {% block content %}{% endblock content %}
+    <main class="content">
+      {% block content %}{% endblock content %}
+    </main>
 
-      <footer>
-        <a href="/">Home</a>
-      </footer>
+
+    {% include "tera/footer" %}
   </body>
 </html>

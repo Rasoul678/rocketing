@@ -64,7 +64,7 @@ async fn main() -> Result<(), rocket::Error> {
             ],
         )
         .mount("/public", FileServer::from("www/static/"))
-        .register("/*", catchers![not_found])
+        .register("/", catchers![not_found])
         .launch()
         .await?;
 

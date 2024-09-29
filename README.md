@@ -40,6 +40,21 @@ cargo install diesel_cli --no-default-features --features postgres
 diesel setup
 ```
 
+- 6
+
+```powershell Then run:
+diesel migration generate "table name"
+```
+
+- 7
+- Next, write the SQL for migrations
+
+- 8
+
+```powershell Finally run:
+diesel migration run
+```
+
 ### Continue reading...
 
 For more instructions read [this](https://diesel.rs/guides/getting-started) article.

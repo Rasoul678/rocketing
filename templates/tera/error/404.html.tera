@@ -3,9 +3,15 @@
   <head>
     <meta charset="utf-8" />
     <title>404 | not found</title>
+    <link rel="stylesheet" href="./public/not-found.css">
   </head>
   <body>
-    <h1>404: Hey! There's nothing here.</h1>
-    The page at {{ uri }} does not exist!
+    <div class="not-found">
+      <h1>404: Hey! There's nothing here.</h1>
+      <p>
+        The page at <span class="url">{{ uri }}</span> does not exist!
+      </p>
+      <button onclick="history.back();">Go Back</button>
+    </div>
   </body>
 </html>
