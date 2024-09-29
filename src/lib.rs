@@ -1,9 +1,10 @@
 pub mod models;
+pub mod routes;
 pub mod schema;
 
 use diesel::prelude::*;
 use dotenvy::dotenv;
-use models::{NewPost, Post};
+use models::{NewPerson, NewPost, Person, Post};
 use std::env;
 
 pub fn establish_connection() -> PgConnection {
@@ -23,6 +24,29 @@ pub fn create_post(conn: &mut PgConnection, title: &str, body: &str) -> Post {
     diesel::insert_into(posts::table)
         .values(&new_post)
         .returning(Post::as_returning())
+        .get_result(conn)
+        .expect("Error saving new post")
+}
+
+pub fn create_person(
+    conn: &mut PgConnection,
+    firstname: &str,
+    lastname: &str,
+    address: &str,
+    city: &str,
+) -> Person {
+    use crate::schema::persons;
+
+    let new_person = NewPerson {
+        firstname: Some(firstname),
+        lastname: Some(lastname),
+        address: Some(address),
+        city: Some(city),
+    };
+
+    diesel::insert_into(persons::table)
+        .values(&new_person)
+        .returning(Person::as_returning())
         .get_result(conn)
         .expect("Error saving new post")
 }

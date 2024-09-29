@@ -1,5 +1,5 @@
-use diesel::prelude::*;
 use crate::schema::*;
+use diesel::prelude::*;
 
 #[derive(Queryable, Selectable)]
 #[diesel(table_name = posts)]
@@ -23,8 +23,17 @@ pub struct NewPost<'a> {
 #[diesel(check_for_backend(diesel::pg::Pg))]
 pub struct Person {
     pub id: i32,
-    pub lastname: Option<String>,
     pub firstname: Option<String>,
+    pub lastname: Option<String>,
     pub address: Option<String>,
     pub city: Option<String>,
+}
+
+#[derive(Insertable)]
+#[diesel(table_name = persons)]
+pub struct NewPerson<'a> {
+    pub firstname: Option<&'a str>,
+    pub lastname: Option<&'a str>,
+    pub address: Option<&'a str>,
+    pub city: Option<&'a str>,
 }
