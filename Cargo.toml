@@ -6,7 +6,14 @@ default-run = "rocketing"
 
 [dependencies]
 rocket = { version = "0.5.1", features = ["json"] }
-diesel = { version = "2.2.4", features = ["postgres", "r2d2"] }
-rocket_dyn_templates = { version = "0.2.0", features = ["tera"] }
+reqwest = { version = "0.12.7", features = ["json"] }
 dotenvy = "0.15.0"
 serde = "1.0.210"
+
+[dependencies.diesel]
+version = "2.2.4"
+features = ["postgres", "r2d2"]
+
+[dependencies.rocket_dyn_templates]
+version = "0.2.0"
+features = ["handlebars", "tera", "minijinja"]

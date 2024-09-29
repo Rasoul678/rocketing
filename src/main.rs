@@ -6,11 +6,16 @@ use std::{
     fs, io,
     path::{Path, PathBuf},
 };
+
 use tokio::time::{sleep, Duration};
 // #[macro_use] extern crate rocket;
 
 use diesel::prelude::*;
-use rocketing::{create_post, establish_connection, models::*, schema::posts::title};
+use rocketing::{create_post, establish_connection, models::*};
+
+extern crate rocket_dyn_templates;
+
+use rocket_dyn_templates::Template;
 
 #[get("/")]
 fn index() -> &'static str {
@@ -106,6 +111,7 @@ async fn new_post(_title: &str, body: &str) {
 #[rocket::main]
 async fn main() -> Result<(), rocket::Error> {
     let _rocket = rocket::build()
+        .attach(Template::fairing())
         .mount(
             "/",
             routes![
