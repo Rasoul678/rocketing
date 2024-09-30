@@ -37,3 +37,19 @@ pub struct NewPerson<'a> {
     pub address: Option<&'a str>,
     pub city: Option<&'a str>,
 }
+
+#[derive(Queryable, Selectable)]
+#[diesel(table_name = todos)]
+#[diesel(check_for_backend(diesel::pg::Pg))]
+pub struct Todo {
+    pub id: i32,
+    pub title: String,
+    pub body: String,
+}
+
+#[derive(Insertable)]
+#[diesel(table_name = todos)]
+pub struct NewTodo<'a> {
+    pub title: &'a str,
+    pub body: &'a str,
+}
