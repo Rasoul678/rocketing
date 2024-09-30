@@ -10,7 +10,7 @@ mod db_routes;
 mod tera_routes;
 
 pub use db_routes::users;
-pub use tera_routes::{not_found, tera_hello};
+pub use tera_routes::{default, internal_error, not_found, tera_hello};
 
 #[get("/")]
 pub fn index() -> RawHtml<&'static str> {

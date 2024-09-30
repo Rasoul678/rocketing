@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <title>404 | not found</title>
-    <link rel="stylesheet" href="./public/not-found.css">
+    <link rel="stylesheet" href="public/not-found.css">
   </head>
   <body>
     <div class="not-found">

@@ -1,0 +1,2 @@
+[global.databases.my_pg_db]
+url = "postgres://rocket:rocket@localhost:6543/rocket"

@@ -1,13 +1,12 @@
-use rocket::{fs::FileServer, *};
-// #[macro_use] extern crate rocket;
-
 use diesel::prelude::*;
+use rocket::{fs::FileServer, *};
+use rocket_dyn_templates::Template;
+use rocket_sync_db_pools::database;
+use rocketing::routes::*;
 use rocketing::{create_person, create_post, establish_connection, models::*};
 
-use rocketing::routes::*;
-
-use rocket_dyn_templates::Template;
-// extern crate rocket_dyn_templates;
+#[database("my_pg_db")]
+struct MyPgDatabase(PgConnection);
 
 #[get("/posts")]
 async fn posts() {
@@ -30,11 +29,11 @@ async fn posts() {
     }
 }
 
-#[get("/create-post/<_title>/<body>")]
-async fn new_post(_title: &str, body: &str) {
-    let connection = &mut establish_connection();
-
-    create_post(connection, _title, body);
+#[get("/new-post/<title>/<body>")]
+async fn new_post(db: MyPgDatabase, title: &str, body: &str) {
+    let title = title.to_string();
+    let body = body.to_string();
+    db.run(move |conn| create_post(conn, title, body)).await;
 }
 
 #[get("/create-person/<first>/<last>/<address>/<city>")]
@@ -47,6 +46,7 @@ async fn new_person(first: &str, last: &str, address: &str, city: &str) {
 #[rocket::main]
 async fn main() -> Result<(), rocket::Error> {
     let _rocket = rocket::build()
+        .attach(MyPgDatabase::fairing())
         .attach(Template::fairing())
         .mount(
             "/",
@@ -64,7 +64,7 @@ async fn main() -> Result<(), rocket::Error> {
             ],
         )
         .mount("/public", FileServer::from("www/static/"))
-        .register("/", catchers![not_found])
+        .register("/", catchers![internal_error, not_found, default])
         .launch()
         .await?;
 
