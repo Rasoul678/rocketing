@@ -1,12 +1,8 @@
 {% extends "tera/base" %}
 
 {% block content %}
-    <h1>Hi {{ name }}!</h1>
-    <h3>Here are your items:</h3>
-    <ul>
-        {% for s in items %}
-            <li>{{ s }}</li>
-        {% endfor %}
-    </ul>
-
+    <div class="flex column">
+        <h1>Hallo Leute!</h1>
+        <h2 class="cyan">Willkommen zu meiner Webseite</h2>
+    </div>
 {% endblock content %}

@@ -1,4 +1,7 @@
 <nav>
-    <a href="/hello">Simple Hello</a>
-    <a href="/public/share.svg">View SVG</a>
+    <a href="/">
+        <image src="/public/images/rocket3.svg" width="30" height="30" alt="logo" />
+    </a>
+    <a href="/users">Users</a>
+    <a href="/posts">Posts</a>
 </nav>

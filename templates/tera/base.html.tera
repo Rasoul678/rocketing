@@ -2,8 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Rocket with Tera | {{ title }}</title>
-    <link rel="stylesheet" href="./public/styles.css">
+    <title>Rocketing | {{ title }}</title>
+    <link rel="stylesheet" href="public/styles.css">
+    <link rel="icon" type="image/x-icon" href="public/images/rocket1.svg">
   </head>
   <body>
     {% include "tera/nav" %}

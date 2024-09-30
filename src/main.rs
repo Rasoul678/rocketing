@@ -48,21 +48,7 @@ async fn main() -> Result<(), rocket::Error> {
     let _rocket = rocket::build()
         .attach(MyPgDatabase::fairing())
         .attach(Template::fairing())
-        .mount(
-            "/",
-            routes![
-                index,
-                simple_hello,
-                tera_hello,
-                delay,
-                blocking_task,
-                get_page,
-                users,
-                posts,
-                new_post,
-                new_person
-            ],
-        )
+        .mount("/", routes![index, users, posts, new_post, new_person])
         .mount("/public", FileServer::from("www/static/"))
         .register("/", catchers![internal_error, not_found, default])
         .launch()

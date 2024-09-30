@@ -51,3 +51,107 @@ footer a {
 footer a:hover {
   text-decoration: overline;
 }
+
+/* * helper classes */
+.flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex.column {
+  flex-direction: column;
+}
+
+/* colors */
+.slate {
+  color: #64748b;
+}
+
+.gray {
+  color: #6b7280;
+}
+
+.zinc {
+  color: #71717a;
+}
+
+.neutral {
+  color: #737373;
+}
+
+.stone {
+  color: #78716c;
+}
+
+.red {
+  color: #ef4444;
+}
+
+.orange {
+  color: #f97316;
+}
+
+.amber {
+  color: #f59e0b;
+}
+
+.yellow {
+  color: #eab308;
+}
+
+.gold {
+  color: gold;
+}
+
+.lime {
+  color: #84cc16;
+}
+
+.green {
+  color: #22c55e;
+}
+
+.emerald {
+  color: #10b981;
+}
+
+.teal {
+  color: #14b8a6;
+}
+
+.cyan {
+  color: #06b6d4;
+}
+
+.sky {
+  color: #0ea5e9;
+}
+
+.blue {
+  color: #3b82f6;
+}
+
+.indigo {
+  color: #6366f1;
+}
+
+.violet {
+  color: #8b5cf6;
+}
+
+.purple {
+  color: #a855f7;
+}
+
+.fuchsia {
+  color: #d946ef;
+}
+
+.pink {
+  color: #ec4899;
+}
+
+.rose {
+  color: #f43f5e;
+}

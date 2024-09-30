@@ -22,14 +22,12 @@ pub fn not_found(req: &Request<'_>) -> Template {
     )
 }
 
-#[get("/hello/<name>")]
-pub fn tera_hello(name: &str) -> Template {
+#[get("/")]
+pub fn index() -> Template {
     Template::render(
         "tera/index",
         context! {
-            title: "Hello",
-            name: Some(name),
-            items: vec!["One", "Two", "Three"],
+            title: "Home",
         },
     )
 }
