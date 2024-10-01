@@ -117,9 +117,21 @@ footer._footer a:hover {
   width: 100dvw;
 }
 
+.max-w-1 {
+  max-width: 1rem;
+}
+
+.max-w-15 {
+  max-width: 15rem;
+}
+
 /* Height */
 .h-1 {
   height: 1rem;
+}
+
+.h-7 {
+  height: 7rem;
 }
 
 .h-8 {

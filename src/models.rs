@@ -1,5 +1,6 @@
 use crate::schema::*;
 use diesel::prelude::*;
+use std::time::SystemTime;
 
 #[derive(Queryable, Selectable)]
 #[diesel(table_name = posts)]
@@ -45,6 +46,8 @@ pub struct Todo {
     pub id: i32,
     pub title: String,
     pub body: String,
+    pub created_at: SystemTime,
+    pub updated_at: Option<SystemTime>,
 }
 
 #[derive(Insertable)]

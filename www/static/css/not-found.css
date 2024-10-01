@@ -25,3 +25,32 @@ body {
 .not-found code.url {
   color: crimson;
 }
+
+.rocket {
+  cursor: pointer;
+  animation: wobble 0.8s infinite;
+}
+
+@keyframes wobble {
+  0% {
+    transform: translateX(0%);
+  }
+  15% {
+    transform: translateX(-8%) rotate(-3deg);
+  }
+  30% {
+    transform: translateX(6%) rotate(2deg);
+  }
+  45% {
+    transform: translateX(-4%) rotate(-2deg);
+  }
+  60% {
+    transform: translateX(3%) rotate(1deg);
+  }
+  75% {
+    transform: translateX(-2%) rotate(-1deg);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}

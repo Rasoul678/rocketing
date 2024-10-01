@@ -1,18 +1,18 @@
 {% extends "tera/base" %}
 
 {% block content %}
-    <h2>Here are all todos:</h2>
+    <h2 class="center gold">Hier finden Sie alle Todos</h2>
     <div class="grid is-col-min-10">
         {% for todo in todos %}
             <div class="card cell m-1">
-            <header class="card-header">
-                <p class="card-header-title">{{ todo.title }}</p>
-            </header>
-                <div class="card-content p-0 h-8">
+                <header class="card-header">
+                    <p class="card-header-title">{{ todo.title }}</p>
+                </header>
+                <div class="card-content p-0 h-7">
                     <div class="content h-full p-3 flex column justify-between">
                         {{ todo.body }}
                         <br />
-                        <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+                        <time datetime="2016-1-1">{{todo.created_at}}</time>
                     </div>
                 </div>
                 <footer class="card-footer">

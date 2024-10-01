@@ -4,10 +4,11 @@
     <meta charset="utf-8" />
     <title>404 | Not Found</title>
     <link rel="stylesheet" href="/css/not-found.css">
+    <link rel="icon" type="image/x-icon" href="/images/rocket1.svg">
   </head>
   <body>
     <div class="not-found">
-      <image onclick="history.back();" src="/images/rocket.svg" width="150" height="150" alt="go-back-image" title="Go Back" />
+      <image class="rocket" onclick="history.back();" src="/images/rocket.svg" width="150" height="150" alt="go-back-image" title="Go Back" />
       <h1 class="gold">404</h1>
       <h1>Whoops! There's nothing here.</h1>
       <p>

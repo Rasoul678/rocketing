@@ -67,14 +67,20 @@ pub async fn todos() -> Template {
         id: i32,
         title: String,
         body: String,
+        created_at: String,
     }
 
     let serializable_todos: Vec<SerializableTodo> = all_todos
         .into_iter()
-        .map(|todo| SerializableTodo {
-            id: todo.id,
-            title: todo.title,
-            body: todo.body,
+        .map(|todo| {
+            let c_at: chrono::DateTime<chrono::Utc> = todo.created_at.into();
+
+            SerializableTodo {
+                id: todo.id,
+                title: todo.title,
+                body: todo.body,
+                created_at: c_at.format("%Y-%m-%d %H:%M:%S").to_string(),
+            }
         })
         .collect();
 
