@@ -35,20 +35,20 @@ main.content {
   margin: 1rem;
 }
 
-footer {
+footer._footer {
   display: flex;
   background-color: #000;
   padding: 1rem;
 }
 
-footer a {
+footer._footer a {
   font-size: 1.2rem;
   text-decoration: none;
   color: gold;
   transition: all 1s ease-in-out;
 }
 
-footer a:hover {
+footer._footer a:hover {
   text-decoration: overline;
 }
 
@@ -61,6 +61,11 @@ footer a:hover {
 
 .flex.column {
   flex-direction: column;
+}
+
+.flex.column.justify-between {
+  align-items: stretch;
+  justify-content: space-between;
 }
 
 .center {
@@ -108,9 +113,54 @@ footer a:hover {
   width: 100%;
 }
 
-/* Margin */
+.w-screen {
+  width: 100dvw;
+}
+
+/* Height */
+.h-1 {
+  height: 1rem;
+}
+
+.h-8 {
+  height: 8rem;
+}
+
+.h-9 {
+  height: 9rem;
+}
+
+.h-full {
+  height: 100%;
+}
+
+.h-screen {
+  height: 100dvh;
+}
+
+/* Margin & Padding */
 .m-auto {
   margin: auto;
+}
+
+.m-1 {
+  margin: 1rem;
+}
+
+.p-0 {
+  padding: 0;
+}
+
+.p-1 {
+  padding: 0.5rem;
+}
+
+.p-2 {
+  padding: 1rem;
+}
+
+.p-2 {
+  padding: 1.5rem;
 }
 
 /* Colors */

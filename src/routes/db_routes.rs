@@ -57,13 +57,14 @@ pub async fn todos() -> Template {
     let connection = &mut establish_connection();
 
     let all_todos = todos
-        .limit(5)
+        .limit(15)
         .select(Todo::as_select())
         .load(connection)
         .expect("Error loading todos");
 
     #[derive(Serialize)]
     struct SerializableTodo {
+        id: i32,
         title: String,
         body: String,
     }
@@ -71,6 +72,7 @@ pub async fn todos() -> Template {
     let serializable_todos: Vec<SerializableTodo> = all_todos
         .into_iter()
         .map(|todo| SerializableTodo {
+            id: todo.id,
             title: todo.title,
             body: todo.body,
         })
