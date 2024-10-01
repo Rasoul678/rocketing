@@ -9,17 +9,9 @@ async fn main() -> Result<(), rocket::Error> {
         .attach(Template::fairing())
         .mount(
             "/",
-            routes![
-                index,
-                users,
-                todos,
-                new_post,
-                new_person,
-                update_todo,
-                new_todo,
-                create_todo
-            ],
+            routes![index, todos, update_todo, new_todo, create_todo],
         )
+        .mount("/api", routes![remove, complete])
         .mount("/", FileServer::from("www/static/"))
         .register("/", catchers![internal_error, not_found, default])
         .launch()

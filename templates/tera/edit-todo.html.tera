@@ -26,7 +26,3 @@
         </form>
     </div>
 {% endblock content %}
-
-{% block script %}
-    <script src="/js/edit-todo.js"></script>
-{% endblock script%}

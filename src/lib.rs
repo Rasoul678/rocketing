@@ -5,7 +5,7 @@ pub mod schema;
 use diesel::prelude::*;
 use diesel::result::Error as DieselError;
 use dotenvy::dotenv;
-use models::{NewPerson, NewPost, NewTodo, Person, Post, Todo};
+use models::{NewTodo, Todo};
 use std::env;
 
 pub fn establish_connection() -> PgConnection {
@@ -17,18 +17,6 @@ pub fn establish_connection() -> PgConnection {
         .unwrap_or_else(|_| panic!("Error connecting to {}", database_url))
 }
 
-pub fn create_post(conn: &mut PgConnection, ref title: String, ref body: String) -> Post {
-    use crate::schema::posts;
-
-    let new_post = NewPost { title, body };
-
-    diesel::insert_into(posts::table)
-        .values(&new_post)
-        .returning(Post::as_returning())
-        .get_result(conn)
-        .expect("Error saving new post")
-}
-
 pub fn add_todo(
     conn: &mut PgConnection,
     ref title: String,
@@ -38,33 +26,22 @@ pub fn add_todo(
 
     let new_todo = NewTodo { title, body };
 
-    let todo = diesel::insert_into(todos::table)
+    diesel::insert_into(todos::table)
         .values(&new_todo)
         .returning(Todo::as_returning())
-        .get_result(conn)?;
-
-    Ok(todo)
+        .get_result(conn)
 }
 
-pub fn create_person(
-    conn: &mut PgConnection,
-    firstname: &str,
-    lastname: &str,
-    address: &str,
-    city: &str,
-) -> Person {
-    use crate::schema::persons;
+pub fn delete_todo(conn: &mut PgConnection, todo_id: i32) -> Result<usize, DieselError> {
+    use crate::schema::todos::dsl::*;
+    diesel::delete(todos.find(todo_id)).execute(conn)
+}
 
-    let new_person = NewPerson {
-        firstname: Some(firstname),
-        lastname: Some(lastname),
-        address: Some(address),
-        city: Some(city),
-    };
+pub fn complete_todo(conn: &mut PgConnection, todo_id: i32) -> Result<Todo, DieselError> {
+    use crate::schema::todos::dsl::*;
 
-    diesel::insert_into(persons::table)
-        .values(&new_person)
-        .returning(Person::as_returning())
+    diesel::update(todos.find(todo_id))
+        .set(completed.eq(true))
+        .returning(Todo::as_returning())
         .get_result(conn)
-        .expect("Error saving new post")
 }

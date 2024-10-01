@@ -6,7 +6,7 @@ default-run = "rocketing"
 
 [dependencies]
 rocket = { version = "0.5.1", features = ["json"] }
-reqwest = { version = "0.12.7", features = ["json"] }
+reqwest = { version = "0.12.8", features = ["json"] }
 dotenvy = "0.15.0"
 serde = "1.0.210"
 chrono = "0.4.38"

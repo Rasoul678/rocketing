@@ -14,8 +14,8 @@ fn main() {
     println!("\nOk! Let's write {title} (Press {EOF} when finished)\n",);
     stdin().read_to_string(&mut body).unwrap();
 
-    let post = create_post(connection, title.clone(), body);
-    println!("\nSaved draft {title} with id {}", post.id);
+    let todo = add_todo(connection, title.clone(), body).unwrap();
+    println!("\nSaved draft {title} with id {}", todo.id);
 }
 
 #[cfg(not(windows))]

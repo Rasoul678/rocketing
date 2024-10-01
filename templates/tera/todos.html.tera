@@ -16,10 +16,14 @@
                     </div>
                 </div>
                 <footer class="card-footer">
-                    <a href="/todos/edit/{{todo.id}}" class="card-footer-item teal">edit</a>
-                    <a href="#" class="card-footer-item has-text-danger">delete</a>
+                    <a href="/todos/edit/{{todo.id}}" class="card-footer-item teal">Edit</a>
+                    <button data-js="complete_{{todo.id}}" class="card-footer-item gold">Done</button>
+                    <button data-js="delete_{{todo.id}}" class="card-footer-item has-text-danger">Delete</button>
                 </footer>
             </div>
         {% endfor %}
     </div>
 {% endblock content %}
+{% block script %}
+    <script defer src="/js/todos.js"></script>
+{% endblock script%}

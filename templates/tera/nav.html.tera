@@ -2,6 +2,5 @@
     <a href="/">
         <image src="/images/rocket3.svg" width="30" height="30" alt="logo" />
     </a>
-    <a href="/users">Users</a>
     <a href="/todos">Todos</a>
 </nav>
