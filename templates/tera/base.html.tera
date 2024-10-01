@@ -3,8 +3,12 @@
   <head>
     <meta charset="utf-8" />
     <title>Rocketing | {{ title }}</title>
-    <link rel="stylesheet" href="public/styles.css">
-    <link rel="icon" type="image/x-icon" href="public/images/rocket1.svg">
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
+    >
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="icon" type="image/x-icon" href="/images/rocket1.svg">
   </head>
   <body>
     {% include "tera/nav" %}
@@ -14,5 +18,7 @@
     </main>
 
     {% include "tera/footer" %}
+
+    {% block script %}{% endblock script %}
   </body>
 </html>

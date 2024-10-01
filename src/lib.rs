@@ -3,8 +3,9 @@ pub mod routes;
 pub mod schema;
 
 use diesel::prelude::*;
+use diesel::result::Error as DieselError;
 use dotenvy::dotenv;
-use models::{NewPerson, NewPost, Person, Post};
+use models::{NewPerson, NewPost, NewTodo, Person, Post, Todo};
 use std::env;
 
 pub fn establish_connection() -> PgConnection {
@@ -26,6 +27,23 @@ pub fn create_post(conn: &mut PgConnection, ref title: String, ref body: String)
         .returning(Post::as_returning())
         .get_result(conn)
         .expect("Error saving new post")
+}
+
+pub fn add_todo(
+    conn: &mut PgConnection,
+    ref title: String,
+    ref body: String,
+) -> Result<Todo, DieselError> {
+    use crate::schema::todos;
+
+    let new_todo = NewTodo { title, body };
+
+    let todo = diesel::insert_into(todos::table)
+        .values(&new_todo)
+        .returning(Todo::as_returning())
+        .get_result(conn)?;
+
+    Ok(todo)
 }
 
 pub fn create_person(

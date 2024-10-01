@@ -1,0 +1,12 @@
+{% extends "tera/base" %}
+
+{% block content %}
+    <h1>Hi!</h1>
+    <h3>Here are all todos:</h3>
+    <ul>
+        {% for todo in todos %}
+            <li>title: {{ todo.title }} body: {{ todo.body }}</li>
+        {% endfor %}
+    </ul>
+
+{% endblock content %}

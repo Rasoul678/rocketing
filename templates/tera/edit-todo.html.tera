@@ -1,0 +1,32 @@
+{% extends "tera/base" %}
+
+{% block content %}
+    <h1 class="center gold">{{title}} Todo</h1>
+    <div class="is-flex is-flex-direction-column is-justify-content-center w-50 m-auto">
+        <form action="/todos/create" method="POST">
+            <div class="field">
+                <label class="label">Title</label>
+                <div class="control">
+                    <input data-js="title" name="title" class="input is-info" type="text" placeholder="e.g Sport treiben" value="{{name}}">
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">Text</label>
+                <div class="control">
+                    <textarea
+                        class="textarea is-medium is-info"
+                        placeholder="Geben Sie etwas ein, bittie!"
+                        name="body"
+                        data-js="body"
+                    >{{body}}</textarea>
+                </div>
+            </div>
+            <button data-js="edit-btn" class="button is-primary w-20">{{title}}</button>
+        </form>
+    </div>
+{% endblock content %}
+
+{% block script %}
+    <script src="/js/edit-todo.js"></script>
+{% endblock script%}

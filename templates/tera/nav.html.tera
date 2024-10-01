@@ -1,7 +1,7 @@
 <nav>
     <a href="/">
-        <image src="/public/images/rocket3.svg" width="30" height="30" alt="logo" />
+        <image src="/images/rocket3.svg" width="30" height="30" alt="logo" />
     </a>
     <a href="/users">Users</a>
-    <a href="/posts">Posts</a>
+    <a href="/todos">Todos</a>
 </nav>

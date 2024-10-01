@@ -22,15 +22,6 @@ body {
   font-size: 1.3rem;
 }
 
-.not-found span.url {
+.not-found code.url {
   color: crimson;
-}
-
-.not-found button {
-  font-size: 1.2rem;
-  color: gold;
-  border: 1px solid gold;
-  padding: 0.3rem 0.5rem;
-  border-radius: 0.5rem;
-  background-color: transparent;
 }

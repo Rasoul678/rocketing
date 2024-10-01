@@ -2,16 +2,17 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>404 | not found</title>
-    <link rel="stylesheet" href="public/not-found.css">
+    <title>404 | Not Found</title>
+    <link rel="stylesheet" href="/css/not-found.css">
   </head>
   <body>
     <div class="not-found">
-      <h1>404: Hey! There's nothing here.</h1>
+      <image onclick="history.back();" src="/images/rocket.svg" width="150" height="150" alt="go-back-image" title="Go Back" />
+      <h1 class="gold">404</h1>
+      <h1>Whoops! There's nothing here.</h1>
       <p>
-        The page at <span class="url">{{ uri }}</span> does not exist!
+        The page at "<code class="url">{{ uri }}</code>" does not exist!
       </p>
-      <button onclick="history.back();">Go Back</button>
     </div>
   </body>
 </html>
