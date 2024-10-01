@@ -1,24 +1,38 @@
 {% extends "tera/base" %}
-
 {% block content %}
     <h2 class="center gold">Hier finden Sie alle Todos</h2>
     <div class="grid is-col-min-10">
         {% for todo in todos %}
-            <div class="card cell m-1">
+            {% if todo.completed %}
+                {% set complete = "Undone" %}
+                {% set e_color = "slate" %}
+                {% set c_color = "cyan" %}
+                {% set d_color = "slate" %}
+                {% set opacity = "opacity-60" %}
+            {% else %}
+                {% set complete = "Done" %}
+                {% set e_color = "lime" %}
+                {% set c_color = "gold" %}
+                {% set d_color = "rose" %}
+                {% set opacity = "opacity-100" %}
+            {% endif %}
+            <div class="card cell m-1 {{opacity}}">
                 <header class="card-header">
-                    <p class="card-header-title">{{ todo.title }}</p>
+                    <p class="card-header-title">Title: {{ todo.title }}</p>
                 </header>
                 <div class="card-content p-0 h-7">
                     <div class="content h-full p-3 flex column justify-between">
-                        {{ todo.body }}
+                        Details: {{ todo.body }}
                         <br />
-                        <time datetime="2016-1-1">{{todo.created_at}}</time>
+                        <time datetime="2016-1-1">Date: {{todo.created_at}}</time>
                     </div>
                 </div>
                 <footer class="card-footer">
-                    <a href="/todos/edit/{{todo.id}}" class="card-footer-item teal">Edit</a>
-                    <button data-js="complete_{{todo.id}}" class="card-footer-item gold">Done</button>
-                    <button data-js="delete_{{todo.id}}" class="card-footer-item has-text-danger">Delete</button>
+                    {% if todo.completed == false %}
+                        <a href="/todos/edit/{{todo.id}}" class="card-footer-item {{e_color}}">Edit</a>
+                    {% endif %}    
+                    <button data-js="complete_{{todo.id}}" class="card-footer-item {{c_color}}">{{complete}}</button>
+                    <button data-js="delete_{{todo.id}}" class="card-footer-item {{d_color}}">Delete</button>
                 </footer>
             </div>
         {% endfor %}

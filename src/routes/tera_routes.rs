@@ -49,6 +49,7 @@ pub async fn todos() -> Template {
     let all_todos = todos
         .limit(15)
         .select(Todo::as_select())
+        .order_by(created_at.desc())
         .load(connection)
         .expect("Error loading todos");
 
@@ -57,7 +58,7 @@ pub async fn todos() -> Template {
         id: i32,
         title: String,
         body: String,
-        comopleted: bool,
+        completed: bool,
         created_at: String,
     }
 
@@ -70,7 +71,7 @@ pub async fn todos() -> Template {
                 id: todo.id,
                 title: todo.title,
                 body: todo.body,
-                comopleted: todo.completed,
+                completed: todo.completed,
                 created_at: c_at.format("%Y-%m-%d %H:%M:%S").to_string(),
             }
         })

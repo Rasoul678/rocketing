@@ -41,7 +41,7 @@ pub fn complete_todo(conn: &mut PgConnection, todo_id: i32) -> Result<Todo, Dies
     use crate::schema::todos::dsl::*;
 
     diesel::update(todos.find(todo_id))
-        .set(completed.eq(true))
+        .set(completed.eq(diesel::dsl::not(completed)))
         .returning(Todo::as_returning())
         .get_result(conn)
 }
