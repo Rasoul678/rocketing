@@ -9,7 +9,14 @@ async fn main() -> Result<(), rocket::Error> {
         .attach(Template::fairing())
         .mount(
             "/",
-            routes![index, todos, update_todo, new_todo, create_todo],
+            routes![
+                index,
+                todos,
+                create_todo_view,
+                create_todo_action,
+                update_todo_view,
+                update_todo_action,
+            ],
         )
         .mount("/api", routes![remove, complete])
         .mount("/", FileServer::from("www/static/"))

@@ -8,31 +8,35 @@
                 {% set e_color = "slate" %}
                 {% set c_color = "cyan" %}
                 {% set d_color = "slate" %}
-                {% set opacity = "opacity-60" %}
+                {% set opacity = "opacity-30" %}
+                {% set line = "line-through" %}
+                {% set has_border = "" %}
             {% else %}
                 {% set complete = "Done" %}
                 {% set e_color = "lime" %}
                 {% set c_color = "gold" %}
                 {% set d_color = "rose" %}
                 {% set opacity = "opacity-100" %}
+                {% set line = "" %}
+                {% set has_border = "border-cyan" %}
             {% endif %}
-            <div class="card cell m-1 {{opacity}}">
-                <header class="card-header">
+            <div class="card cell m-1 {{has_border}} c_card">
+                <header class="card-header {{opacity}} {{line}}">
                     <p class="card-header-title">Title: {{ todo.title }}</p>
                 </header>
-                <div class="card-content p-0 h-7">
+                <div class="card-content p-0 h-5 {{opacity}} {{line}}">
                     <div class="content h-full p-3 flex column justify-between">
                         Details: {{ todo.body }}
                         <br />
-                        <time datetime="2016-1-1">Date: {{todo.created_at}}</time>
+                        <time class="size-1">Created at: {{todo.created_at}}</time>
                     </div>
                 </div>
-                <footer class="card-footer">
+                <footer class="card-footer c_foo">
                     {% if todo.completed == false %}
                         <a href="/todos/edit/{{todo.id}}" class="card-footer-item {{e_color}}">Edit</a>
                     {% endif %}    
                     <button data-js="complete_{{todo.id}}" class="card-footer-item {{c_color}}">{{complete}}</button>
-                    <button data-js="delete_{{todo.id}}" class="card-footer-item {{d_color}}">Delete</button>
+                    <button data-js="delete_{{todo.id}}" class="card-footer-item {{d_color}} {{opacity}}">Delete</button>
                 </footer>
             </div>
         {% endfor %}

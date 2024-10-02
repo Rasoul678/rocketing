@@ -1,4 +1,4 @@
-use crate::{add_todo, establish_connection, models::*};
+use crate::{add_todo, establish_connection, models::*, update_todo};
 use diesel::prelude::*;
 use rocket::form::Form;
 use rocket::http::Status;
@@ -87,25 +87,27 @@ pub async fn todos() -> Template {
 }
 
 #[get("/todos/new")]
-pub async fn new_todo() -> Template {
+pub async fn create_todo_view() -> Template {
     Template::render(
-        "tera/edit-todo",
+        "tera/form-todo",
         context! {
             title: "Create",
             name: "",
-            body: ""
+            body: "",
+            id: 0
         },
     )
 }
 
 #[derive(FromForm, Debug, Deserialize)]
-pub struct CreateTodo {
+pub struct TodoForm {
     title: String,
     body: String,
+    id: Option<i32>,
 }
 
 #[post("/todos/create", data = "<todo>")]
-pub async fn create_todo(db: MyPgDatabase, todo: Form<CreateTodo>) -> Redirect {
+pub async fn create_todo_action(db: MyPgDatabase, todo: Form<TodoForm>) -> Redirect {
     let title = todo.title.clone();
     let body = todo.body.clone();
 
@@ -119,7 +121,7 @@ pub async fn create_todo(db: MyPgDatabase, todo: Form<CreateTodo>) -> Redirect {
 }
 
 #[get("/todos/edit/<t_id>")]
-pub async fn update_todo(db: MyPgDatabase, t_id: &str) -> Template {
+pub async fn update_todo_view(db: MyPgDatabase, t_id: &str) -> Template {
     use crate::schema::todos::dsl::*;
 
     let todo_id = t_id.parse::<i32>().unwrap_or_default();
@@ -128,20 +130,22 @@ pub async fn update_todo(db: MyPgDatabase, t_id: &str) -> Template {
         .run(move |conn| {
             todos
                 .filter(id.eq(todo_id))
+                .filter(completed.eq(false))
                 .select(Todo::as_select())
                 .first(conn)
                 .optional()
-                .expect("Error loading posts")
+                .expect("Error loading todo")
         })
         .await;
 
     match todo {
         Some(todo) => Template::render(
-            "tera/edit-todo",
+            "tera/form-todo",
             context! {
                 title: "Update",
                 name: todo.title,
-                body: todo.body
+                body: todo.body,
+                id: todo_id
             },
         ),
         None => Template::render(
@@ -151,5 +155,22 @@ pub async fn update_todo(db: MyPgDatabase, t_id: &str) -> Template {
                 uri: format!("/todo/{t_id}")
             },
         ),
+    }
+}
+
+#[post("/todos/update", data = "<todo>")]
+pub async fn update_todo_action(db: MyPgDatabase, todo: Form<TodoForm>) -> Redirect {
+    let title = todo.title.clone();
+    let body = todo.body.clone();
+    let todo_id = todo.id.unwrap_or_default();
+
+    let new_todo = db
+        .run(move |conn| update_todo(conn, todo_id, title, body))
+        .await;
+
+    match new_todo {
+        Ok(_) => Redirect::to("/todos"),
+        // TODO: replace with nice html error page
+        Err(_) => panic!("Error updating todo"),
     }
 }

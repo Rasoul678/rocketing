@@ -32,6 +32,19 @@ pub fn add_todo(
         .get_result(conn)
 }
 
+pub fn update_todo(
+    conn: &mut PgConnection,
+    todo_id: i32,
+    ref new_title: String,
+    ref new_body: String,
+) -> Result<Todo, DieselError> {
+    use crate::schema::todos::dsl::*;
+
+    diesel::update(todos.find(todo_id))
+        .set((title.eq(new_title), body.eq(new_body)))
+        .returning(Todo::as_returning())
+        .get_result(conn)
+}
 pub fn delete_todo(conn: &mut PgConnection, todo_id: i32) -> Result<usize, DieselError> {
     use crate::schema::todos::dsl::*;
     diesel::delete(todos.find(todo_id)).execute(conn)

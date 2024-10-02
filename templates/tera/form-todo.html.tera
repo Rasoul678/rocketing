@@ -3,7 +3,13 @@
 {% block content %}
     <h1 class="center gold">{{title}} Todo</h1>
     <div class="is-flex is-flex-direction-column is-justify-content-center w-50 m-auto">
-        <form action="/todos/create" method="POST">
+        {% if title == "Update" %}
+            {% set action="/todos/update" %}
+        {% else %}
+            {% set action="/todos/create" %}
+        {% endif %}
+        <form action={{action}} method="POST">
+            <input type="hidden" name="id" value="{{id}}">
             <div class="field">
                 <label class="label">Title</label>
                 <div class="control">

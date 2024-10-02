@@ -8,7 +8,8 @@ mod tera_routes;
 pub struct MyPgDatabase(PgConnection);
 
 pub use tera_routes::{
-    create_todo, default, index, internal_error, new_todo, not_found, todos, update_todo,
+    create_todo_action, create_todo_view, default, index, internal_error, not_found, todos,
+    update_todo_action, update_todo_view,
 };
 
 pub use api_routes::{complete, remove};
