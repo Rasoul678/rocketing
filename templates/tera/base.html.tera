@@ -19,6 +19,7 @@
 
     {% include "tera/footer" %}
 
+    <script defer src="/js/base.js"></script>
     {% block script %}{% endblock script %}
   </body>
 </html>

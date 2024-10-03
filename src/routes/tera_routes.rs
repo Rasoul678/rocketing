@@ -2,7 +2,8 @@ use crate::{add_todo, establish_connection, models::*, update_todo};
 use diesel::prelude::*;
 use rocket::form::Form;
 use rocket::http::Status;
-use rocket::response::Redirect;
+use rocket::request::FlashMessage;
+use rocket::response::{Flash, Redirect};
 use rocket::serde::Deserialize;
 use rocket::*;
 use rocket_dyn_templates::{context, Template};
@@ -40,9 +41,18 @@ pub fn index() -> Template {
 }
 
 #[get("/todos")]
-pub async fn todos() -> Template {
+pub async fn todos(flash: Option<FlashMessage<'_>>) -> Template {
     use crate::schema::todos::dsl::*;
     use rocket::serde::Serialize;
+
+    let msg_type = flash
+        .as_ref()
+        .map(|flash| flash.kind().to_uppercase())
+        .unwrap_or_default();
+
+    let msg_content = flash
+        .map(|flash| format!("{}", flash.message()))
+        .unwrap_or_default();
 
     let connection = &mut establish_connection();
 
@@ -82,19 +92,26 @@ pub async fn todos() -> Template {
         context! {
             title: "Todos",
             todos: serializable_todos,
+            msg_type,
+            msg_content
         },
     )
 }
 
 #[get("/todos/new")]
-pub async fn create_todo_view() -> Template {
+pub async fn create_todo_view(flash: Option<FlashMessage<'_>>) -> Template {
+    let flash_msg = flash
+        .map(|flash| format!("{}: {}", flash.kind(), flash.message()))
+        .unwrap_or_default();
+
     Template::render(
         "tera/form-todo",
         context! {
             title: "Create",
             name: "",
             body: "",
-            id: 0
+            id: 0,
+            msg: flash_msg
         },
     )
 }
@@ -107,22 +124,44 @@ pub struct TodoForm {
 }
 
 #[post("/todos/create", data = "<todo>")]
-pub async fn create_todo_action(db: MyPgDatabase, todo: Form<TodoForm>) -> Redirect {
-    let title = todo.title.clone();
-    let body = todo.body.clone();
+pub async fn create_todo_action(
+    db: MyPgDatabase,
+    todo: Form<TodoForm>,
+) -> Result<Flash<Redirect>, Flash<Redirect>> {
+    let title = todo.title.trim().to_string();
+    let body = todo.body.trim().to_string();
+
+    if title.is_empty() || body.is_empty() {
+        return Err(Flash::error(
+            Redirect::to(uri!(create_todo_view)),
+            "Title and Text are required!",
+        ));
+    }
 
     let new_todo = db.run(move |conn| add_todo(conn, title, body)).await;
 
     match new_todo {
-        Ok(_) => Redirect::to("/todos"),
-        // TODO: replace with nice html error page
-        Err(_) => panic!("Error saving new todo"),
+        Ok(_) => Ok(Flash::success(
+            Redirect::to(uri!("/todos")),
+            "New Todo successfully added",
+        )),
+        Err(_) => Err(Flash::error(
+            Redirect::to(uri!(todos)),
+            "Error saving new todo",
+        )),
     }
 }
-
 #[get("/todos/edit/<t_id>")]
-pub async fn update_todo_view(db: MyPgDatabase, t_id: &str) -> Template {
+pub async fn update_todo_view(
+    db: MyPgDatabase,
+    t_id: &str,
+    flash: Option<FlashMessage<'_>>,
+) -> Template {
     use crate::schema::todos::dsl::*;
+
+    let flash_msg = flash
+        .map(|flash| format!("{}: {}", flash.kind(), flash.message()))
+        .unwrap_or_default();
 
     let todo_id = t_id.parse::<i32>().unwrap_or_default();
 
@@ -145,7 +184,8 @@ pub async fn update_todo_view(db: MyPgDatabase, t_id: &str) -> Template {
                 title: "Update",
                 name: todo.title,
                 body: todo.body,
-                id: todo_id
+                id: todo_id,
+                msg: flash_msg
             },
         ),
         None => Template::render(
@@ -159,18 +199,33 @@ pub async fn update_todo_view(db: MyPgDatabase, t_id: &str) -> Template {
 }
 
 #[post("/todos/update", data = "<todo>")]
-pub async fn update_todo_action(db: MyPgDatabase, todo: Form<TodoForm>) -> Redirect {
-    let title = todo.title.clone();
-    let body = todo.body.clone();
+pub async fn update_todo_action(
+    db: MyPgDatabase,
+    todo: Form<TodoForm>,
+) -> Result<Flash<Redirect>, Flash<Redirect>> {
+    let title = todo.title.trim().to_string();
+    let body = todo.body.trim().to_string();
     let todo_id = todo.id.unwrap_or_default();
+
+    if title.is_empty() || body.is_empty() {
+        return Err(Flash::error(
+            Redirect::to(uri!(update_todo_view(todo_id.to_string()))),
+            "Title and Text are required!",
+        ));
+    }
 
     let new_todo = db
         .run(move |conn| update_todo(conn, todo_id, title, body))
         .await;
 
     match new_todo {
-        Ok(_) => Redirect::to("/todos"),
-        // TODO: replace with nice html error page
-        Err(_) => panic!("Error updating todo"),
+        Ok(_) => Ok(Flash::success(
+            Redirect::to(uri!("/todos")),
+            "Todo successfully updated",
+        )),
+        Err(_) => Err(Flash::error(
+            Redirect::to(uri!(todos)),
+            "Error updating new todo",
+        )),
     }
 }

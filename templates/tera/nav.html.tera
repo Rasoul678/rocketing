@@ -2,6 +2,6 @@
     <a href="/">
         <image src="/images/rocket3.svg" width="30" height="30" alt="logo" />
     </a>
-    <a href="/todos/new" class="button is-primary is-small">Add New Todo</a>
+    <a href="/todos/new" class="button is-primary is-small">New Todo</a>
     <a href="/todos" class="link">Todos</a>
 </nav>

@@ -41,6 +41,28 @@ footer._footer {
   padding: 1rem;
 }
 
+.flash_msg {
+  position: absolute;
+  bottom: 3rem;
+  left: 1rem;
+  width: auto;
+  cursor: pointer;
+}
+
+.top {
+  top: 5rem;
+}
+
+.anim-come-in {
+  transform: translateX(-350px);
+  animation: come-in 0.5s ease-in forwards;
+}
+
+.anim-go-away {
+  transform: translateX(-350px);
+  animation: go-away 0.5s ease-out forwards;
+}
+
 .c_foo {
   height: 2.2rem;
 }
@@ -159,6 +181,11 @@ footer._footer {
 
 .m-1 {
   margin: 1rem;
+}
+
+.p-y-2 {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
 }
 
 .p-0 {
@@ -332,4 +359,24 @@ footer._footer {
 
 .rose {
   color: #f43f5e !important;
+}
+
+@keyframes come-in {
+  from {
+    transform: translateX(-350px);
+  }
+
+  to {
+    transform: translateX(0px);
+  }
+}
+
+@keyframes go-away {
+  from {
+    transform: translateX(0px);
+  }
+
+  to {
+    transform: translateX(-350px);
+  }
 }

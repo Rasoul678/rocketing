@@ -2,6 +2,13 @@
 
 {% block content %}
     <h1 class="center gold">{{title}} Todo</h1>
+    <article data-js="msg" class="message is-warning flash_msg anim-come-in"> 
+        {% if msg %}
+            <div class="message-body">
+                {{msg}}
+            </div>
+        {% endif %}
+    </article>
     <div class="is-flex is-flex-direction-column is-justify-content-center w-50 m-auto">
         {% if title == "Update" %}
             {% set action="/todos/update" %}
@@ -28,7 +35,7 @@
                     >{{body}}</textarea>
                 </div>
             </div>
-            <button data-js="edit-btn" class="button is-primary w-20">{{title}}</button>
+            <button data-js="edit-btn" class="button is-success w-20">{{title}}</button>
         </form>
     </div>
 {% endblock content %}
