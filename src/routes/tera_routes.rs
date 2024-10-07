@@ -1,10 +1,13 @@
-use crate::{add_todo, establish_connection, models::*, update_todo};
+use crate::{
+    add_todo, add_user, establish_connection, hash_password, models::*, update_todo, AuthUser,
+    RegisterUserForm, TodoForm,
+};
 use diesel::prelude::*;
 use rocket::form::Form;
 use rocket::http::Status;
+use rocket::http::{Cookie, CookieJar};
 use rocket::request::FlashMessage;
 use rocket::response::{Flash, Redirect};
-use rocket::serde::Deserialize;
 use rocket::*;
 use rocket_dyn_templates::{context, Template};
 
@@ -31,23 +34,36 @@ pub fn not_found(req: &Request<'_>) -> Template {
 }
 
 #[get("/")]
-pub fn index() -> Template {
+pub fn index(flash: Option<FlashMessage<'_>>) -> Template {
+    let msg_type = flash
+        .as_ref()
+        .map(|flash| flash.kind().to_string())
+        .unwrap_or_default();
+
+    let msg_content = flash
+        .map(|flash| format!("{}", flash.message()))
+        .unwrap_or_default();
+
     Template::render(
         "tera/index",
         context! {
             title: "Home",
+            msg_type,
+            msg_content
         },
     )
 }
 
 #[get("/todos")]
-pub async fn todos(flash: Option<FlashMessage<'_>>) -> Template {
+pub async fn todos(flash: Option<FlashMessage<'_>>, user: AuthUser) -> Template {
     use crate::schema::todos::dsl::*;
     use rocket::serde::Serialize;
 
+    println!("User ID: {}", user.user_id);
+
     let msg_type = flash
         .as_ref()
-        .map(|flash| flash.kind().to_uppercase())
+        .map(|flash| flash.kind().to_string())
         .unwrap_or_default();
 
     let msg_content = flash
@@ -98,8 +114,16 @@ pub async fn todos(flash: Option<FlashMessage<'_>>) -> Template {
     )
 }
 
+#[get("/todos", rank = 2)]
+pub fn todos_redirect() -> Flash<Redirect> {
+    Flash::error(
+        Redirect::to(uri!("/")),
+        "Sorry, you must log in to access todos",
+    )
+}
+
 #[get("/todos/new")]
-pub async fn create_view(flash: Option<FlashMessage<'_>>) -> Template {
+pub async fn create_todo_view(flash: Option<FlashMessage<'_>>) -> Template {
     let flash_msg = flash
         .map(|flash| format!("{}: {}", flash.kind(), flash.message()))
         .unwrap_or_default();
@@ -116,15 +140,8 @@ pub async fn create_view(flash: Option<FlashMessage<'_>>) -> Template {
     )
 }
 
-#[derive(FromForm, Debug, Deserialize)]
-pub struct TodoForm {
-    title: String,
-    body: String,
-    id: Option<i32>,
-}
-
 #[post("/todos/create", data = "<todo>")]
-pub async fn create_action(
+pub async fn create_todo_action(
     db: MyPgDatabase,
     todo: Form<TodoForm>,
 ) -> Result<Flash<Redirect>, Flash<Redirect>> {
@@ -133,7 +150,7 @@ pub async fn create_action(
 
     if title.is_empty() || body.is_empty() {
         return Err(Flash::error(
-            Redirect::to(uri!(create_view)),
+            Redirect::to(uri!(create_todo_view)),
             "Title and Text are required!",
         ));
     }
@@ -151,8 +168,9 @@ pub async fn create_action(
         )),
     }
 }
+
 #[get("/todos/edit/<t_id>")]
-pub async fn update_view(
+pub async fn update_todo_view(
     db: MyPgDatabase,
     t_id: &str,
     flash: Option<FlashMessage<'_>>,
@@ -199,7 +217,7 @@ pub async fn update_view(
 }
 
 #[post("/todos/update", data = "<todo>")]
-pub async fn update_action(
+pub async fn update_todo_action(
     db: MyPgDatabase,
     todo: Form<TodoForm>,
 ) -> Result<Flash<Redirect>, Flash<Redirect>> {
@@ -209,7 +227,7 @@ pub async fn update_action(
 
     if title.is_empty() || body.is_empty() {
         return Err(Flash::error(
-            Redirect::to(uri!(update_view(todo_id.to_string()))),
+            Redirect::to(uri!(update_todo_view(todo_id.to_string()))),
             "Title and Text are required!",
         ));
     }
@@ -226,6 +244,62 @@ pub async fn update_action(
         Err(_) => Err(Flash::error(
             Redirect::to(uri!(todos)),
             "Error updating new todo",
+        )),
+    }
+}
+
+#[get("/users/register")]
+pub async fn create_user_view(flash: Option<FlashMessage<'_>>) -> Template {
+    let flash_msg = flash
+        .map(|flash| format!("{}: {}", flash.kind(), flash.message()))
+        .unwrap_or_default();
+
+    Template::render(
+        "tera/form-user",
+        context! {
+            title: "Register",
+            name: "",
+            email: "",
+            msg: flash_msg
+        },
+    )
+}
+
+#[post("/users/create", data = "<user>")]
+pub async fn create_user_action(
+    db: MyPgDatabase,
+    user: Form<RegisterUserForm>,
+    cookies: &CookieJar<'_>,
+) -> Result<Flash<Redirect>, Flash<Redirect>> {
+    let name = user.name.trim().to_string();
+    let email = user.email.trim().to_string();
+    let password = user.password.trim().to_string();
+
+    if name.is_empty() || password.is_empty() {
+        return Err(Flash::error(
+            Redirect::to(uri!(create_user_view)),
+            "Name and Password are required!",
+        ));
+    }
+
+    let password_hash = hash_password(&password);
+
+    let new_user = db
+        .run(move |conn| add_user(conn, name, email, password_hash))
+        .await;
+
+    match new_user {
+        Ok(user) => {
+            cookies.add_private(Cookie::new("user_id", user.id.to_string()));
+
+            Ok(Flash::success(
+                Redirect::to(uri!("/")),
+                "New User successfully logged in",
+            ))
+        }
+        Err(_) => Err(Flash::error(
+            Redirect::to(uri!("/")),
+            "Error registering new user",
         )),
     }
 }

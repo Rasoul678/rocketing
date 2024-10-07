@@ -13,6 +13,14 @@ pub struct User {
     pub updated_at: Option<SystemTime>,
 }
 
+#[derive(Insertable)]
+#[diesel(table_name = users)]
+pub struct NewUser<'a> {
+    pub name: &'a str,
+    pub email: &'a str,
+    pub password_hash: &'a str,
+}
+
 #[derive(Queryable, Selectable, Identifiable, Associations, Debug, PartialEq)]
 #[diesel(belongs_to(User))]
 #[diesel(table_name = todos)]
