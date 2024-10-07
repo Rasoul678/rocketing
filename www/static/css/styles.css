@@ -63,7 +63,7 @@ footer._footer {
   animation: go-away 0.5s ease-out forwards;
 }
 
-.c_foo {
+.card_footer {
   height: 2.2rem;
 }
 
@@ -235,6 +235,14 @@ footer._footer {
 
 .border-cyan {
   border: 2px solid var(--cyan);
+}
+
+.c_container {
+  justify-items: center;
+}
+
+.c_card {
+  width: 15.5rem;
 }
 
 .c_card:not(.border-cyan)::after {

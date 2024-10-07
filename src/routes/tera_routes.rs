@@ -99,7 +99,7 @@ pub async fn todos(flash: Option<FlashMessage<'_>>) -> Template {
 }
 
 #[get("/todos/new")]
-pub async fn create_todo_view(flash: Option<FlashMessage<'_>>) -> Template {
+pub async fn create_view(flash: Option<FlashMessage<'_>>) -> Template {
     let flash_msg = flash
         .map(|flash| format!("{}: {}", flash.kind(), flash.message()))
         .unwrap_or_default();
@@ -124,7 +124,7 @@ pub struct TodoForm {
 }
 
 #[post("/todos/create", data = "<todo>")]
-pub async fn create_todo_action(
+pub async fn create_action(
     db: MyPgDatabase,
     todo: Form<TodoForm>,
 ) -> Result<Flash<Redirect>, Flash<Redirect>> {
@@ -133,7 +133,7 @@ pub async fn create_todo_action(
 
     if title.is_empty() || body.is_empty() {
         return Err(Flash::error(
-            Redirect::to(uri!(create_todo_view)),
+            Redirect::to(uri!(create_view)),
             "Title and Text are required!",
         ));
     }
@@ -152,7 +152,7 @@ pub async fn create_todo_action(
     }
 }
 #[get("/todos/edit/<t_id>")]
-pub async fn update_todo_view(
+pub async fn update_view(
     db: MyPgDatabase,
     t_id: &str,
     flash: Option<FlashMessage<'_>>,
@@ -199,7 +199,7 @@ pub async fn update_todo_view(
 }
 
 #[post("/todos/update", data = "<todo>")]
-pub async fn update_todo_action(
+pub async fn update_action(
     db: MyPgDatabase,
     todo: Form<TodoForm>,
 ) -> Result<Flash<Redirect>, Flash<Redirect>> {
@@ -209,7 +209,7 @@ pub async fn update_todo_action(
 
     if title.is_empty() || body.is_empty() {
         return Err(Flash::error(
-            Redirect::to(uri!(update_todo_view(todo_id.to_string()))),
+            Redirect::to(uri!(update_view(todo_id.to_string()))),
             "Title and Text are required!",
         ));
     }

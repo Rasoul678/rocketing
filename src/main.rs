@@ -12,10 +12,10 @@ async fn main() -> Result<(), rocket::Error> {
             routes![
                 index,
                 todos,
-                create_todo_view,
-                create_todo_action,
-                update_todo_view,
-                update_todo_action,
+                create_view,
+                create_action,
+                update_view,
+                update_action,
             ],
         )
         .mount("/api", routes![remove, complete])

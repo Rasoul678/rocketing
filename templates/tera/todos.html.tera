@@ -13,7 +13,13 @@
             </div>
         </article>
     {% endif %}
-    <div class="grid is-col-min-10">
+    <div class="grid is-col-min-10 c_container">
+        {% if todos|length == 0 %}
+            <div class="notification w-50 m-auto center">
+                <h1>Zurzeit gibt es keine Todos hier!</h1>
+                <p>Versuchen Sie, einen neuen <strong><code class="cyan">Todo</code></strong> zu erstellen</p>
+            </div>
+        {% endif %}
         {% for todo in todos %}
             {% if todo.completed %}
                 {% set complete = "Undone" %}
@@ -38,12 +44,12 @@
                 </header>
                 <div class="card-content p-0 h-5 {{opacity}} {{line}}">
                     <div class="content h-full p-3 flex column justify-between">
-                        Details: {{ todo.body }}
+                        {{ todo.body }}
                         <br />
                         <time class="size-1">Created at: {{todo.created_at}}</time>
                     </div>
                 </div>
-                <footer class="card-footer c_foo">
+                <footer class="card-footer card_footer">
                     {% if todo.completed == false %}
                         <a href="/todos/edit/{{todo.id}}" class="card-footer-item {{e_color}}">Edit</a>
                     {% endif %}    
