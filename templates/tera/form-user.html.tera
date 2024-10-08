@@ -11,9 +11,9 @@
     </article>
     <div class="is-flex is-flex-direction-column is-justify-content-center w-40 m-auto">
         {% if title == "REGISTER" %}
-            {% set action="/users/register" %}
+            {% set action="/auth/register" %}
         {% else %}
-            {% set action="/users/login" %}
+            {% set action="/auth/login" %}
         {% endif %}
         <form action={{action}} method="POST">
             {% if title == "REGISTER" %}
