@@ -20,7 +20,7 @@
             <div class="field">
                 <label class="label">Title</label>
                 <div class="control">
-                    <input data-js="title" name="title" class="input is-info" type="text" placeholder="e.g Sport treiben" value="{{name}}">
+                    <input data-js="title" name="title" class="input is-info" type="text" placeholder="e.g Sport treiben" value="{{name}}" aria-label="title field">
                 </div>
             </div>
 

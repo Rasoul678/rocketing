@@ -1,0 +1,43 @@
+{% extends "tera/base" %}
+
+{% block content %}
+    <h1 class="center gold">{{title}}</h1>
+    <article data-js="msg" class="message is-warning flash_msg anim-come-in"> 
+        {% if msg %}
+            <div class="message-body">
+                {{msg}}
+            </div>
+        {% endif %}
+    </article>
+    <div class="is-flex is-flex-direction-column is-justify-content-center w-40 m-auto">
+        {% if title == "REGISTER" %}
+            {% set action="/users/register" %}
+        {% else %}
+            {% set action="/users/login" %}
+        {% endif %}
+        <form action={{action}} method="POST">
+            {% if title == "REGISTER" %}
+                <div class="field">
+                    <label class="label">Name</label>
+                    <div class="control">
+                        <input data-js="name" name="name" class="input is-info" type="text" placeholder="e.g John Doe" aria-label="name field">
+                    </div>
+                </div>
+            {% endif %}
+            <div class="field">
+                <label class="label">Email</label>
+                <div class="control">
+                    <input data-js="email" name="email" class="input is-info" type="email" placeholder="e.g john.doe@gmail.com" aria-label="email field">
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">Password</label>
+                <div class="control">
+                    <input data-js="password" name="password" class="input is-info" type="password" placeholder="********" aria-label="password field">
+                </div>
+            </div>
+            <button data-js="edit-btn" class="button is-success w-20">{{title}}</button>
+        </form>
+    </div>
+{% endblock content %}

@@ -5,11 +5,12 @@ edition = "2021"
 default-run = "rocketing"
 
 [dependencies]
-rocket = { version = "0.5.1", features = ["json"] }
+rocket = { version = "0.5.1", features = ["json", "secrets"] }
 reqwest = { version = "0.12.8", features = ["json"] }
 dotenvy = "0.15.0"
 serde = "1.0.210"
 chrono = "0.4.38"
+rust-crypto = "0.2.36"
 
 [dependencies.diesel]
 version = "2.2.4"

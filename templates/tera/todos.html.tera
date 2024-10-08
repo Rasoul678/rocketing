@@ -1,18 +1,18 @@
 {% extends "tera/base" %}
 {% block content %}
     <h2 class="p-y-2 center gold">Hier finden Sie alle Todos</h2>
-     {% if msg_content %}
-        {% if msg_type == "error" %}
-            {% set msg_color = "is-danger" %}
-        {% else %}
-            {% set msg_color = "is-success" %}
+        {% if msg_content %}
+            {% if msg_type == "error" %}
+                {% set msg_color = "is-danger" %}
+            {% else %}
+                {% set msg_color = "is-success" %}
+            {% endif %}
+            <article data-js="msg" class="message flash_msg top anim-come-in {{msg_color}}">        
+                <div class="message-body">
+                    {{msg_type}}: {{msg_content}}
+                </div>
+            </article>
         {% endif %}
-        <article data-js="msg" class="message flash_msg top anim-come-in {{msg_color}}">        
-            <div class="message-body">
-                {{msg_type}}: {{msg_content}}
-            </div>
-        </article>
-    {% endif %}
     <div class="grid is-col-min-10 c_container">
         {% if todos|length == 0 %}
             <div class="notification w-50 m-auto center">

@@ -54,12 +54,12 @@ footer._footer {
 }
 
 .anim-come-in {
-  transform: translateX(-350px);
+  transform: translateX(-500px);
   animation: come-in 0.5s ease-in forwards;
 }
 
 .anim-go-away {
-  transform: translateX(-350px);
+  transform: translateX(-500px);
   animation: go-away 0.5s ease-out forwards;
 }
 
@@ -371,7 +371,7 @@ footer._footer {
 
 @keyframes come-in {
   from {
-    transform: translateX(-350px);
+    transform: translateX(-500px);
   }
 
   to {
@@ -385,6 +385,6 @@ footer._footer {
   }
 
   to {
-    transform: translateX(-350px);
+    transform: translateX(-500px);
   }
 }
