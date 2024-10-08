@@ -7,7 +7,7 @@ use std::time::SystemTime;
 pub struct User {
     pub id: i32,
     pub name: String,
-    pub email: Option<String>,
+    pub email: String,
     pub password_hash: String,
     pub created_at: SystemTime,
     pub updated_at: Option<SystemTime>,
@@ -40,4 +40,5 @@ pub struct Todo {
 pub struct NewTodo<'a> {
     pub title: &'a str,
     pub body: &'a str,
+    pub user_id: i32,
 }

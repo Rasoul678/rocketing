@@ -16,7 +16,7 @@ diesel::table! {
     users (id) {
         id -> Int4,
         name -> Varchar,
-        email -> Nullable<Varchar>,
+        email -> Varchar,
         password_hash -> Text,
         created_at -> Timestamp,
         updated_at -> Nullable<Timestamp>,
@@ -25,4 +25,7 @@ diesel::table! {
 
 diesel::joinable!(todos -> users (user_id));
 
-diesel::allow_tables_to_appear_in_same_query!(todos, users,);
+diesel::allow_tables_to_appear_in_same_query!(
+    todos,
+    users,
+);

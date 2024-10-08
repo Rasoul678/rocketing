@@ -10,23 +10,24 @@
         {% endif %}
     </article>
     <div class="is-flex is-flex-direction-column is-justify-content-center w-40 m-auto">
-        {% if title == "Register" %}
-            {% set action="/users/create" %}
+        {% if title == "REGISTER" %}
+            {% set action="/users/register" %}
         {% else %}
             {% set action="/users/login" %}
         {% endif %}
         <form action={{action}} method="POST">
-            <div class="field">
-                <label class="label">Name</label>
-                <div class="control">
-                    <input data-js="name" name="name" class="input is-info" type="text" placeholder="e.g John Doe" value="{{name}}" aria-label="name field">
+            {% if title == "REGISTER" %}
+                <div class="field">
+                    <label class="label">Name</label>
+                    <div class="control">
+                        <input data-js="name" name="name" class="input is-info" type="text" placeholder="e.g John Doe" aria-label="name field">
+                    </div>
                 </div>
-            </div>
-
+            {% endif %}
             <div class="field">
                 <label class="label">Email</label>
                 <div class="control">
-                    <input data-js="email" name="email" class="input is-info" type="email" placeholder="e.g john.doe@gmail.com" value="{{email}}" aria-label="email field">
+                    <input data-js="email" name="email" class="input is-info" type="email" placeholder="e.g john.doe@gmail.com" aria-label="email field">
                 </div>
             </div>
 

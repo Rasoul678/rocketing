@@ -2,9 +2,15 @@
     <a href="/">
         <image src="/images/rocket3.svg" width="30" height="30" alt="logo" />
     </a>
-    <a href="/todos/new" class="button is-primary is-small">New Todo</a>
-    <a href="/todos" class="link">TODOS</a>
-    <a href="/users/register" class="link">REGISTER</a>
-    {# TODO: ? #}
-    <a href="#" class="link">LOGOUT</a>
+    {% if user %}
+        <p class="gold">{{user.email}}</p>
+        <form action="/auth/logout" method="POST">
+            <button class="button is-small is-outlined is-danger is-rounded">LOGOUT</button>
+        </form>
+        <a href="/todos/new" class="button is-primary is-small is-rounded">New Todo</a>
+        <a href="/todos" class="button is-info is-small is-rounded">TODOS</a>
+    {% else %}
+        <a href="/auth/register" class="button is-primary is-rounded is-small">REGISTER</a>
+        <a href="/auth/login" class="button is-rounded is-small">LOGIN</a>
+    {% endif %}
 </nav>

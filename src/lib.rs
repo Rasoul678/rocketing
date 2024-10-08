@@ -30,10 +30,15 @@ pub fn add_todo(
     conn: &mut PgConnection,
     ref title: String,
     ref body: String,
+    user_id: i32,
 ) -> Result<Todo, DieselError> {
     use crate::schema::todos;
 
-    let new_todo = NewTodo { title, body };
+    let new_todo = NewTodo {
+        title,
+        body,
+        user_id,
+    };
 
     diesel::insert_into(todos::table)
         .values(&new_todo)
@@ -76,6 +81,14 @@ pub fn add_user(
 ) -> Result<User, DieselError> {
     use crate::schema::users;
 
+    let exists = get_user_by_email(conn, &email).unwrap_or_default();
+
+    if exists.is_some() {
+        return Err(DieselError::QueryBuilderError(
+            "User with this email already exists".into(),
+        ));
+    }
+
     let new_user = NewUser {
         name,
         email,
@@ -86,4 +99,27 @@ pub fn add_user(
         .values(&new_user)
         .returning(User::as_returning())
         .get_result(conn)
+}
+
+pub fn get_user_by_email(
+    conn: &mut PgConnection,
+    user_email: &str,
+) -> Result<Option<User>, DieselError> {
+    use crate::schema::users::dsl::*;
+    users
+        .filter(email.eq(user_email))
+        .select(User::as_select())
+        .first(conn)
+        .optional()
+}
+
+pub fn get_user_todos(conn: &mut PgConnection, uid: i32) -> Result<Vec<Todo>, DieselError> {
+    use crate::schema::todos::dsl::*;
+
+    todos
+        .filter(user_id.eq(uid))
+        .limit(15)
+        .order_by(created_at.desc())
+        .select(Todo::as_select())
+        .load(conn)
 }
